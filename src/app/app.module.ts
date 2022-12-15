@@ -8,9 +8,16 @@ import { AppRoutingModule } from './app.routingmodule';
 import { ArchiveComponent } from './archive/archive.component';
 import { TasksComponent } from './tasks/tasks.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
-  imports: [BrowserModule, FormsModule, CommonModule, AppRoutingModule],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    CommonModule,
+    AppRoutingModule,
+    HttpClientModule,
+  ],
   declarations: [
     AppComponent,
     ArchiveComponent,
