@@ -7,7 +7,6 @@ import { Task } from './tasks';
   providedIn: 'root',
 })
 export class TasksService {
-  retrievedData = 1;
   constructor(private http: HttpClient) {}
 
   public get(archived = false): Observable<any> {
@@ -17,7 +16,6 @@ export class TasksService {
   }
 
   public post(task: Task): Observable<any> {
-    console.log(task);
     return this.http.post(
       'https://lab13.zecer.wi.zut.edu.pl/api/fd46507',
       task
@@ -27,11 +25,14 @@ export class TasksService {
   public put(task: Task): Observable<any> {
     this.http
       .put(`https://lab13.zecer.wi.zut.edu.pl/api/fd46507/${task.id}`, task)
-      .subscribe((response) => {
-        console.log(response);
-      });
+      .subscribe((response) => {});
     return;
   }
 
-  // public deleteTask(task: Task): Observable<any> {}
+  public deleteTask(task: Task): Observable<any> {
+    this.http
+      .delete(`https://lab13.zecer.wi.zut.edu.pl/api/fd46507/${task.id}`)
+      .subscribe((response) => {});
+    return;
+  }
 }

@@ -16,6 +16,9 @@ export class TasksComponent implements OnInit {
   constructor(private tasksService: TasksService) {}
 
   addBtnClick() {
+    if (this.title == null) {
+      return;
+    }
     let newTask: Task = new Task();
     newTask.title = this.title;
     newTask.deadline = this.deadline;
@@ -24,7 +27,9 @@ export class TasksComponent implements OnInit {
     this.tasksService.post(newTask).subscribe((response) => {
       console.log(response);
     });
-    this.loadElements(true);
+    setTimeout(this.loadElements.bind(this, true), 50);
+    this.title = null;
+    this.deadline = null;
   }
 
   archiveCompleted() {
@@ -34,19 +39,18 @@ export class TasksComponent implements OnInit {
         this.tasksService.put(this.tasks[i]);
       }
     }
-    this.loadElements(true);
+    setTimeout(this.loadElements.bind(this, true), 50);
   }
 
   private switchTaskChanged(task: Task) {
     let div = document.getElementById(String(task.id));
     if (task.completed == true) {
       task.completed = false;
-      div.style.backgroundColor = 'white';
     } else {
       task.completed = true;
-      div.style.backgroundColor = '#ADADAD';
     }
     this.tasksService.put(task);
+    setTimeout(this.loadElements.bind(this, true), 50);
   }
 
   loadElementsOnSite(data: Object[], reload: boolean = false) {
@@ -55,19 +59,12 @@ export class TasksComponent implements OnInit {
       mainDiv.replaceChildren();
     }
     this.tasks = data;
-    // const task = tasks.find(task => task.id === 589);
-    // console.log(task);
     for (let i = 0; i < this.tasks.length; i++) {
       let div = document.createElement('div');
       div.style.borderStyle = 'solid';
       div.style.borderWidth = '1px';
       div.style.marginBottom = '25px';
       div.id = `${this.tasks[i].id}`;
-
-      let label = document.createElement('label');
-      label.style.fontWeight = 'bold';
-      label.style.margin = '10px';
-      label.innerText = String(this.tasks[i].deadline);
 
       let p = document.createElement('p');
       p.innerText = this.tasks[i].title;
@@ -89,16 +86,27 @@ export class TasksComponent implements OnInit {
       if (this.tasks[i].completed == true) {
         div.style.backgroundColor = '#ADADAD';
         input.checked = true;
+      } else {
+        input.checked = false;
+        div.style.backgroundColor = 'white';
       }
 
-      div.appendChild(label);
+      if (this.tasks[i].deadline != null) {
+        let label = document.createElement('label');
+        label.style.fontWeight = 'bold';
+        label.style.margin = '10px';
+        label.innerText = String(this.tasks[i].deadline);
+        div.appendChild(label);
+      } else {
+        input.style.marginTop = '-25px';
+      }
+
       div.appendChild(p);
       div.appendChild(input);
 
       let mainDiv = document.getElementById('newElements');
       mainDiv.appendChild(div);
     }
-    // console.log(tasks[1]);
   }
 
   loadElements(reload: boolean = false) {
