@@ -43,7 +43,6 @@ export class TasksComponent implements OnInit {
   }
 
   private switchTaskChanged(task: Task) {
-    let div = document.getElementById(String(task.id));
     if (task.completed == true) {
       task.completed = false;
     } else {
